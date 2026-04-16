@@ -1,5 +1,5 @@
 export function useApi() {
-  const { token } = useAuth()
+  const { token, logout } = useAuth()
 
   function apiFetch<T>(url: string, opts: any = {}): Promise<T> {
     return $fetch<T>(url, {
@@ -7,6 +7,11 @@ export function useApi() {
       headers: {
         ...opts.headers,
         ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
+      },
+      onResponseError({ response }) {
+        if (response.status === 401) {
+          logout()
+        }
       },
     })
   }

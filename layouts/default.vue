@@ -8,6 +8,10 @@
           <Separator orientation="vertical" class="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
+              <BreadcrumbItem class="hidden md:block">
+                <BreadcrumbLink href="/">小红书AI助手</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator class="hidden md:block" />
               <BreadcrumbItem>
                 <BreadcrumbPage>{{ pageTitle }}</BreadcrumbPage>
               </BreadcrumbItem>
@@ -15,7 +19,7 @@
           </Breadcrumb>
         </div>
       </header>
-      <div class="flex flex-1 flex-col gap-4 p-4">
+      <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
         <slot />
       </div>
     </SidebarInset>
@@ -27,8 +31,10 @@ import { Separator } from '@/components/ui/separator'
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import {
   SidebarInset,
@@ -45,6 +51,6 @@ const pageTitle = computed(() => {
   if (path.includes('/plans')) return '内容规划'
   if (path.includes('/notes')) return '笔记管理'
   if (path.includes('/stats')) return '数据看板'
-  return '小红书AI助手'
+  return '首页'
 })
 </script>

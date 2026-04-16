@@ -7,7 +7,7 @@
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
               <SidebarMenuButton size="lg" class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-pink-600 text-white text-sm font-bold">
+                <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-sm font-bold">
                   {{ currentAccount ? currentAccount.name.charAt(0) : '?' }}
                 </div>
                 <div class="flex flex-col gap-0.5 leading-none">
@@ -22,7 +22,7 @@
               <DropdownMenuSeparator />
               <DropdownMenuItem v-for="acc in accounts" :key="acc.id" @click="switchAccount(acc.id)">
                 <div class="flex items-center gap-2">
-                  <div class="flex size-6 items-center justify-center rounded bg-pink-600 text-white text-xs font-bold">
+                  <div class="flex size-6 items-center justify-center rounded bg-sidebar-primary text-sidebar-primary-foreground text-xs font-bold">
                     {{ acc.name.charAt(0) }}
                   </div>
                   <span>{{ acc.name }}</span>
@@ -64,7 +64,7 @@
             <DropdownMenuTrigger as-child>
               <SidebarMenuButton size="lg">
                 <Avatar class="h-8 w-8 rounded-lg">
-                  <AvatarFallback class="rounded-lg bg-gray-200">{{ user?.email?.charAt(0)?.toUpperCase() }}</AvatarFallback>
+                  <AvatarFallback class="rounded-lg">{{ user?.email?.charAt(0)?.toUpperCase() }}</AvatarFallback>
                 </Avatar>
                 <div class="grid flex-1 text-left text-sm leading-tight">
                   <span class="truncate font-semibold">{{ user?.email }}</span>
@@ -95,7 +95,7 @@
       <div class="space-y-4 py-4">
         <div class="space-y-2">
           <Label>账号名称</Label>
-          <Input v-model="newAccountName" placeholder="如：美食日记号" />
+          <Input v-model="newAccountName" placeholder="如：美食日记号" @keydown.enter="handleCreate" />
         </div>
       </div>
       <DialogFooter>
@@ -115,6 +115,7 @@ import {
   Calendar,
   BookOpen,
   BarChart3,
+  LayoutDashboard,
   Plus,
   LogOut,
 } from 'lucide-vue-next'
@@ -160,8 +161,7 @@ const showCreateDialog = ref(false)
 const newAccountName = ref('')
 const creating = ref(false)
 
-// 当前选中的账号ID，存在 useState 里跨页面共享
-const currentAccountId = useState<number | null>('currentAccountId', () => null)
+const currentAccountId = useCookie<number | null>('currentAccountId')
 
 const { data: accounts, refresh: refreshAccounts } = useAsyncData('sidebar-accounts', () =>
   apiFetch<any[]>('/api/accounts')
@@ -175,7 +175,6 @@ const currentAccount = computed(() => {
   return accounts.value[0]
 })
 
-// 自动选中第一个账号
 watch(accounts, (accs) => {
   if (accs?.length && !currentAccountId.value) {
     currentAccountId.value = accs[0].id
@@ -186,7 +185,7 @@ const navItems = computed(() => {
   const id = currentAccountId.value
   if (!id) return []
   return [
-    { to: '/', label: '仪表盘', icon: BarChart3 },
+    { to: '/', label: '仪表盘', icon: LayoutDashboard },
     { to: `/accounts/${id}/prompt`, label: '账号人设', icon: FileText },
     { to: `/accounts/${id}/plans`, label: '内容规划', icon: Calendar },
     { to: `/accounts/${id}/notes`, label: '笔记管理', icon: BookOpen },
@@ -223,7 +222,6 @@ async function handleCreate() {
   }
 }
 
-// 暴露给其他组件使用
 provide('currentAccountId', currentAccountId)
 provide('refreshAccounts', refreshAccounts)
 </script>

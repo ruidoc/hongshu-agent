@@ -63,10 +63,7 @@
 import { FileText, Calendar, BookOpen, BarChart3 } from 'lucide-vue-next'
 
 const { apiFetch } = useApi()
-const { fetchUser } = useAuth()
-const currentAccountId = useState<number | null>('currentAccountId')
-
-onMounted(() => fetchUser())
+const currentAccountId = useCookie<number | null>('currentAccountId')
 
 const { data: accounts } = useAsyncData('dashboard-accounts', () =>
   apiFetch<any[]>('/api/accounts')
