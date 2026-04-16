@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  accounts  Account[]
+}
+
+model Account {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  user      User          @relation(fields: [userId], references: [id])
+  name      String
+  prompt    String        @db.Text  // 账号人设提示词，一段文本定义风格、定位、人设等
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  plans     ContentPlan[]
+  notes     Note[]
+}
+
+model ContentPlan {
+  id        Int      @id @default(autoincrement())
+  accountId Int
+  account   Account  @relation(fields: [accountId], references: [id])
+  title     String
+  startDate DateTime
+  endDate   DateTime
+  topics    Json
+  createdAt DateTime @default(now())
+  notes     Note[]
+}
+
+model Note {
+  id          Int          @id @default(autoincrement())
+  accountId   Int
+  account     Account      @relation(fields: [accountId], references: [id])
+  planId      Int?
+  plan        ContentPlan? @relation(fields: [planId], references: [id])
+  title       String
+  content     String       @db.Text
+  tags        String
+  topics      String?
+  status      String       @default("draft")
+  publishedAt DateTime?
+  createdAt   DateTime     @default(now())
+  stats       NoteStats?
+}
+
+model NoteStats {
+  id        Int      @id @default(autoincrement())
+  noteId    Int      @unique
+  note      Note     @relation(fields: [noteId], references: [id])
+  views     Int      @default(0)
+  likes     Int      @default(0)
+  collects  Int      @default(0)
+  comments  Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
