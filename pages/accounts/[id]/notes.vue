@@ -28,7 +28,7 @@
       </div>
     </div>
     <div v-else class="flex flex-col items-center justify-center py-20 text-muted-foreground">
-      <BookOpen class="size-12 mb-4 opacity-50" />
+      <BookOpen class="size-12 mb-4 text-[#ff2442] opacity-50" />
       <p>还没有笔记</p>
       <p class="text-sm mt-1">去「内容规划」从选题生成笔记</p>
     </div>

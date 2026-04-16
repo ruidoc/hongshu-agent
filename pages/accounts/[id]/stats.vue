@@ -63,7 +63,7 @@
         </table>
       </div>
       <div v-else class="flex flex-col items-center justify-center py-20 text-muted-foreground">
-        <BarChart3 class="size-12 mb-4 opacity-50" />
+        <BarChart3 class="size-12 mb-4 text-[#ff2442] opacity-50" />
         <p>暂无数据</p>
         <p class="text-sm mt-1">发布笔记并录入数据后这里会显示趋势</p>
       </div>

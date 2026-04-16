@@ -20,7 +20,7 @@
         <div class="grid gap-3 md:grid-cols-2">
           <NuxtLink v-if="currentAccountId" :to="`/accounts/${currentAccountId}/prompt`"
             class="flex items-center gap-3 rounded-lg border p-4 hover:bg-accent transition-colors">
-            <FileText class="size-5 text-muted-foreground" />
+            <FileText class="size-5 text-[#ff2442]" />
             <div>
               <div class="font-medium">设定人设</div>
               <div class="text-sm text-muted-foreground">编辑账号的提示词和风格定义</div>
@@ -28,7 +28,7 @@
           </NuxtLink>
           <NuxtLink v-if="currentAccountId" :to="`/accounts/${currentAccountId}/plans`"
             class="flex items-center gap-3 rounded-lg border p-4 hover:bg-accent transition-colors">
-            <Calendar class="size-5 text-muted-foreground" />
+            <Calendar class="size-5 text-[#ff2442]" />
             <div>
               <div class="font-medium">生成规划</div>
               <div class="text-sm text-muted-foreground">让 AI 为你制定内容日历</div>
@@ -36,7 +36,7 @@
           </NuxtLink>
           <NuxtLink v-if="currentAccountId" :to="`/accounts/${currentAccountId}/notes`"
             class="flex items-center gap-3 rounded-lg border p-4 hover:bg-accent transition-colors">
-            <BookOpen class="size-5 text-muted-foreground" />
+            <BookOpen class="size-5 text-[#ff2442]" />
             <div>
               <div class="font-medium">查看笔记</div>
               <div class="text-sm text-muted-foreground">管理已生成的笔记内容</div>
@@ -44,7 +44,7 @@
           </NuxtLink>
           <NuxtLink v-if="currentAccountId" :to="`/accounts/${currentAccountId}/stats`"
             class="flex items-center gap-3 rounded-lg border p-4 hover:bg-accent transition-colors">
-            <BarChart3 class="size-5 text-muted-foreground" />
+            <BarChart3 class="size-5 text-[#ff2442]" />
             <div>
               <div class="font-medium">数据看板</div>
               <div class="text-sm text-muted-foreground">查看笔记互动数据和趋势</div>

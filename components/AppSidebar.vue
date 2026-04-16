@@ -7,7 +7,7 @@
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
               <SidebarMenuButton size="lg" class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-sm font-bold">
+                <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-[#ff2442]/15 text-[#ff2442] text-sm font-bold">
                   {{ currentAccount ? currentAccount.name.charAt(0) : '?' }}
                 </div>
                 <div class="flex flex-col gap-0.5 leading-none">
@@ -30,7 +30,7 @@
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem @click="showCreateDialog = true">
-                <Plus class="size-4 mr-2" />
+                <Plus class="size-4 mr-2 text-[#ff2442]" />
                 新建账号
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -46,9 +46,28 @@
           <SidebarMenu>
             <SidebarMenuItem v-for="item in navItems" :key="item.to">
               <SidebarMenuButton as-child :is-active="isActive(item.to)">
-                <NuxtLink :to="item.to">
-                  <component :is="item.icon" class="size-4" />
-                  <span>{{ item.label }}</span>
+                <NuxtLink
+                  :to="item.to"
+                  :class="[
+                    'flex w-full items-center gap-2 transition-[opacity,color]',
+                    isActive(item.to) ? 'text-hongshu opacity-100' : 'opacity-60',
+                  ]"
+                >
+                  <component
+                    :is="item.icon"
+                    :class="[
+                      'size-4 transition-colors',
+                      isActive(item.to) ? 'text-[#ff2442]' : 'text-white',
+                    ]"
+                  />
+                  <span
+                    :class="[
+                      'transition-colors',
+                      isActive(item.to) ? 'text-white' : 'text-white',
+                    ]"
+                  >
+                    {{ item.label }}
+                  </span>
                 </NuxtLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -64,7 +83,7 @@
             <DropdownMenuTrigger as-child>
               <SidebarMenuButton size="lg">
                 <Avatar class="h-8 w-8 rounded-lg">
-                  <AvatarFallback class="rounded-lg">{{ user?.email?.charAt(0)?.toUpperCase() }}</AvatarFallback>
+                  <AvatarFallback class="rounded-lg bg-[#ff2442]/15 text-[#ff2442]">{{ user?.email?.charAt(0)?.toUpperCase() }}</AvatarFallback>
                 </Avatar>
                 <div class="grid flex-1 text-left text-sm leading-tight">
                   <span class="truncate font-semibold">{{ user?.email }}</span>
@@ -73,7 +92,7 @@
             </DropdownMenuTrigger>
             <DropdownMenuContent class="w-[--reka-popper-anchor-width]" align="start" side="top">
               <DropdownMenuItem @click="logout">
-                <LogOut class="size-4 mr-2" />
+                <LogOut class="size-4 mr-2 text-[#ff2442]" />
                 退出登录
               </DropdownMenuItem>
             </DropdownMenuContent>

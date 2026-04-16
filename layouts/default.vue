@@ -9,7 +9,7 @@
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem class="hidden md:block">
-                <BreadcrumbLink href="/">小红书AI助手</BreadcrumbLink>
+                <BreadcrumbLink href="/">首页</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator class="hidden md:block" />
               <BreadcrumbItem>
@@ -19,8 +19,10 @@
           </Breadcrumb>
         </div>
       </header>
-      <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <slot />
+      <div class="flex flex-1 flex-col gap-4 px-4 py-6">
+        <div class="mx-auto w-full max-w-5xl">
+          <slot />
+        </div>
       </div>
     </SidebarInset>
   </SidebarProvider>

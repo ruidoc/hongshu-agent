@@ -43,7 +43,7 @@
       </div>
     </div>
     <div v-else class="flex flex-col items-center justify-center py-20 text-muted-foreground">
-      <Calendar class="size-12 mb-4 opacity-50" />
+      <Calendar class="size-12 mb-4 text-[#ff2442] opacity-80" />
       <p>还没有内容规划</p>
       <p class="text-sm mt-1">点击上方「生成规划」让 AI 为你制定内容日历</p>
     </div>
