@@ -34,9 +34,8 @@
               <p class="text-sm font-medium">{{ topic.topic }}</p>
               <p class="text-xs text-muted-foreground mt-0.5">{{ topic.direction }}</p>
             </div>
-            <Button variant="outline" size="sm" @click="generateNoteFromTopic(plan.id, topic, i)"
-              :disabled="generatingNote === `${plan.id}-${i}`">
-              {{ generatingNote === `${plan.id}-${i}` ? '生成中...' : '生成笔记' }}
+            <Button variant="outline" size="sm" @click="goToWorkbench(plan.id, topic)">
+              生成笔记
             </Button>
           </div>
         </div>
@@ -60,7 +59,6 @@ const accountId = Number(route.params.id)
 
 const days = ref(7)
 const generating = ref(false)
-const generatingNote = ref('')
 
 const { data: plans, refresh } = useAsyncData(`plans-${accountId}`, () =>
   apiFetch<any[]>(`/api/plans?accountId=${accountId}`)
@@ -90,18 +88,10 @@ async function handleGenerate() {
   }
 }
 
-async function generateNoteFromTopic(planId: number, topic: any, index: number) {
-  generatingNote.value = `${planId}-${index}`
-  try {
-    await apiFetch('/api/notes/generate', {
-      method: 'POST',
-      body: { accountId, planId, topic: topic.topic, direction: topic.direction },
-    })
-    alert('笔记已生成，去「笔记管理」查看')
-  } catch (e: any) {
-    alert(e.data?.message || '生成失败')
-  } finally {
-    generatingNote.value = ''
-  }
+function goToWorkbench(planId: number, topic: any) {
+  navigateTo({
+    path: `/accounts/${accountId}/workbench`,
+    query: { planId, topic: topic.topic, direction: topic.direction },
+  })
 }
 </script>

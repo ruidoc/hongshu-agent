@@ -135,6 +135,7 @@ import {
   BookOpen,
   BarChart3,
   LayoutDashboard,
+  PenTool,
   Plus,
   LogOut,
 } from 'lucide-vue-next'
@@ -207,6 +208,7 @@ const navItems = computed(() => {
     { to: '/', label: '仪表盘', icon: LayoutDashboard },
     { to: `/accounts/${id}/prompt`, label: '账号人设', icon: FileText },
     { to: `/accounts/${id}/plans`, label: '内容规划', icon: Calendar },
+    { to: `/accounts/${id}/workbench`, label: '笔记工作台', icon: PenTool },
     { to: `/accounts/${id}/notes`, label: '笔记管理', icon: BookOpen },
     { to: `/accounts/${id}/stats`, label: '数据看板', icon: BarChart3 },
   ]

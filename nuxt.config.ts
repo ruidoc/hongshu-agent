@@ -2,11 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt'],
-  shadcn: {
-    prefix: '',
-    componentDir: './components/ui',
-  },
+  components: [
+    {
+      path: '~/components',
+      ignore: ['ui/**'],
+    },
+  ],
+  modules: ['@nuxtjs/tailwindcss'],
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-me',
     anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',

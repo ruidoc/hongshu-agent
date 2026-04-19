@@ -1,13 +1,44 @@
 import { generateText } from 'ai'
 import { createAnthropic } from '@ai-sdk/anthropic'
 
-function getModel() {
+function normalizeAnthropicBaseUrl(baseUrl: string): string | undefined {
+  if (!baseUrl) return undefined
+
+  try {
+    const url = new URL(baseUrl)
+
+    // Many proxy gateways require /v1 for Anthropic-compatible routes.
+    if (!url.pathname || url.pathname === '/') {
+      url.pathname = '/v1'
+    }
+
+    return url.toString().replace(/\/$/, '')
+  } catch {
+    return baseUrl
+  }
+}
+
+function toReadableAiError(error: unknown): Error {
+  const message = error instanceof Error ? error.message : String(error)
+
+  if (
+    message.includes('Invalid JSON response')
+    || message.includes('AI_JSONParseError')
+    || message.includes('<!doctype html>')
+  ) {
+    return new Error('AI 服务返回了 HTML 页面而非 JSON。请检查 ANTHROPIC_BASE_URL 是否配置为 Anthropic 接口地址（通常需要包含 /v1）。')
+  }
+
+  return error instanceof Error ? error : new Error(message)
+}
+
+export function getModel() {
   const config = useRuntimeConfig()
   const anthropic = createAnthropic({
     apiKey: config.anthropicApiKey,
-    baseURL: config.anthropicBaseUrl || undefined,
+    baseURL: normalizeAnthropicBaseUrl(config.anthropicBaseUrl),
   })
-  return anthropic('claude-sonnet-4-20250514')
+  return anthropic('claude-sonnet-4-6')
 }
 
 interface AccountInfo {
@@ -27,10 +58,11 @@ export async function generateContentPlan(
   days: number,
 ): Promise<TopicItem[]> {
   const model = getModel()
-
-  const { text } = await generateText({
-    model,
-    system: `你是一位资深小红书运营专家，擅长制定内容策略和选题规划。
+  let text = ''
+  try {
+    const result = await generateText({
+      model,
+      system: `你是一位资深小红书运营专家，擅长制定内容策略和选题规划。
 
 以下是账号的人设和风格定义：
 ${account.prompt}
@@ -48,7 +80,11 @@ ${account.prompt}
 3. 新号起步阶段，注重引流和涨粉内容
 4. 选题之间有一定的关联性和递进感
 5. 每个选题要有明确的角度和方向`,
-  })
+    })
+    text = result.text
+  } catch (error) {
+    throw toReadableAiError(error)
+  }
 
   try {
     return JSON.parse(text)
@@ -85,9 +121,11 @@ export async function generateNote(ctx: NoteGenerationContext): Promise<Generate
     dataContext = `\n近期已发布笔记及数据：\n${notesSummary}\n请参考数据表现，数据好的类型多产出类似内容，数据差的避免重复。`
   }
 
-  const { text } = await generateText({
-    model,
-    system: `你是一位小红书爆款内容创作者。
+  let text = ''
+  try {
+    const result = await generateText({
+      model,
+      system: `你是一位小红书爆款内容创作者。
 
 以下是账号的人设和风格定义：
 ${ctx.account.prompt}
@@ -102,7 +140,11 @@ ${ctx.account.prompt}
 今日选题：${ctx.topic}
 选题方向：${ctx.direction}
 ${dataContext}`,
-  })
+    })
+    text = result.text
+  } catch (error) {
+    throw toReadableAiError(error)
+  }
 
   try {
     return JSON.parse(text)
